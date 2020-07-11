@@ -1,0 +1,9 @@
+Bright scheme from Paul Tol
+
+blue ---  68, 19,170 - #4477aa
+cyan --- 102,204,238 - #66ccee
+green --  34,136, 51 - #228833
+yellow - 204,187, 68 - #ccbb44
+red ---- 238,102,119 - #ee6677
+purple - 170, 51,119 - #aa3377
+grey --- 187,187,187 - #bbbbbb
