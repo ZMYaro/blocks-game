@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
 	private const float MAX_WALK_SPEED = 2.1f;
 	private const float BASE_JUMP_ACC = 5f;
 	private const float HIGH_JUMP_MIN_SPEED = 1f;
+	private const float HIGH_JUMP_MULTIPLIER = 1.5f;
 	private const string RESPAWN_POINT_TAG = "Respawn";
 	private const string KILL_TRIGGER_TAG = "KillTrigger";
 
@@ -85,7 +86,7 @@ public class Player : MonoBehaviour
 		float jumpAcc = BASE_JUMP_ACC;
 		if (Mathf.Abs(_rb.velocity.x) > HIGH_JUMP_MIN_SPEED)
 		{
-			jumpAcc += Mathf.Abs(_rb.velocity.x) - HIGH_JUMP_MIN_SPEED;
+			jumpAcc += (Mathf.Abs(_rb.velocity.x) - HIGH_JUMP_MIN_SPEED) * HIGH_JUMP_MULTIPLIER;
 		}
 		_rb.velocity = new Vector2(_rb.velocity.x, jumpAcc);
 	}
