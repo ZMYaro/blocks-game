@@ -8,8 +8,11 @@ public class Player : MonoBehaviour
 	private const float MAX_WALK_SPEED = 2.1f;
 	private const float BASE_JUMP_ACC = 5f;
 	private const float HIGH_JUMP_MIN_SPEED = 1f;
+	private const string RESPAWN_POINT_TAG = "Respawn";
+	private const string KILL_TRIGGER_TAG = "KillTrigger";
 
 	public LayerMask platformLayerMask;
+	public GameObject screenBlackout;
 
 	private BoxCollider2D _collider;
 	private Rigidbody2D _rb;
@@ -20,6 +23,18 @@ public class Player : MonoBehaviour
 		_rb = GetComponent<Rigidbody2D>();
 
 		UpdateCollider();
+		StartCoroutine(Respawn());
+	}
+
+	private IEnumerator Respawn()
+	{
+		screenBlackout?.SetActive(true);
+
+		GameObject spawnPoint = GameObject.FindGameObjectWithTag(RESPAWN_POINT_TAG);
+		this.transform.position = spawnPoint.transform.position;
+
+		yield return new WaitForSeconds(0.25f);
+		screenBlackout?.SetActive(false);
 	}
 
 	/// <summary>
@@ -62,7 +77,7 @@ public class Player : MonoBehaviour
 
 	private void HandleJump()
 	{
-		if (!IsOnGround() || !Input.GetButtonDown("Jump"))
+		if (!IsOnGroundOrWall() || !Input.GetButtonDown("Jump"))
 		{
 			return;
 		}
@@ -75,7 +90,7 @@ public class Player : MonoBehaviour
 		_rb.velocity = new Vector2(_rb.velocity.x, jumpAcc);
 	}
 
-	private bool IsOnGround()
+	private bool IsOnGroundOrWall()
 	{
 		const float ALLOWED_SPACE_AROUND = 0.02f;
 		RaycastHit2D raycastHit = Physics2D.BoxCast(
@@ -86,5 +101,14 @@ public class Player : MonoBehaviour
 			ALLOWED_SPACE_AROUND,
 			platformLayerMask);
 		return raycastHit.collider != null;
+	}
+
+	private void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (collision.tag != KILL_TRIGGER_TAG)
+		{
+			return;
+		}
+		StartCoroutine(Respawn());
 	}
 }
