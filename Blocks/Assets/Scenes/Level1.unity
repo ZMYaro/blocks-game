@@ -1722,6 +1722,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1502094367}
   offset: {x: 1, y: 1.25}
+  followSpeedFactor: 4
 --- !u!114 &636116151
 MonoBehaviour:
   m_ObjectHideFlags: 0
