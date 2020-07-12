@@ -29,8 +29,11 @@ public class GlowBox : MonoBehaviour
 
 	public void Release(Vector2 velocity)
 	{
+		// Remove the box from its parent.
 		transform.parent = null;
-		transform.position = transform.position + (Vector3)velocity;
+		transform.position = transform.position + (Vector3)(velocity * 0.5f);
+
+		// Enable it as its own physics object.
 		_rb.bodyType = RigidbodyType2D.Dynamic;
 		_rb.velocity = velocity;
 		_collider.enabled = true;

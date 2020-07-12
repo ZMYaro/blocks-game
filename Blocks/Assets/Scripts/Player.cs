@@ -138,7 +138,6 @@ public class Player : MonoBehaviour
 				{
 					throwVelocity.x = transform.localScale.x < 0 ? -MIN_THROW_SPEED : MIN_THROW_SPEED;
 				}
-				Debug.Log(throwVelocity);
 				box.Release(throwVelocity);
 				// Note the box that was found so it can be removed and subsequent ones can shift down.
 				thrownBox = box;
