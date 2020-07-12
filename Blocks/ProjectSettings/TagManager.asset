@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Red
+  - Green
+  - Yellow
+  - Cyan
+  - Purple
   layers:
   - Default
   - TransparentFX

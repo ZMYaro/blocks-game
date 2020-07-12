@@ -5,5 +5,5 @@ using UnityEngine.Experimental.Rendering.Universal;
 
 public class GlowBox : MonoBehaviour
 {
-	public Light2D associatedPlayerLight;
+	public string colorTag;
 }
