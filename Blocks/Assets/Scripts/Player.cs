@@ -18,6 +18,20 @@ public class Player : MonoBehaviour
 	{
 		_collider = GetComponent<BoxCollider2D>();
 		_rb = GetComponent<Rigidbody2D>();
+
+		UpdateCollider();
+	}
+
+	/// <summary>
+	/// Recalculate and update the size of the collider depending on the number of held boxes.
+	/// </summary>
+	private void UpdateCollider()
+	{
+		GlowBox[] boxes = GetComponentsInChildren<GlowBox>();
+		const int PLAYER_HEIGHT = 64;
+		const int BOX_SIZE = 48;
+		_collider.size = new Vector2(BOX_SIZE / 100f, (PLAYER_HEIGHT + (boxes.Length * BOX_SIZE)) / 100f);
+		_collider.offset = new Vector2(0, _collider.size.y / 2f);
 	}
 
 	/// <summary>

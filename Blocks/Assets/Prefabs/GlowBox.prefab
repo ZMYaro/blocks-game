@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1134964775381123506}
   - component: {fileID: 1134964775381123507}
   - component: {fileID: 1134964775381123516}
+  - component: {fileID: 4340351250925941601}
   m_Layer: 8
   m_Name: GlowBox
   m_TagString: Untagged
@@ -180,3 +181,16 @@ MonoBehaviour:
   - {x: -0.16540751, y: 0.47629237, z: 0}
   - {x: -0.2084349, y: 0.45160472, z: 0}
   - {x: -0.23648965, y: 0.40995705, z: 0}
+--- !u!114 &4340351250925941601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134964775381123518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fae4c1d09b9c92840a9cdbcea111ac40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  associatedPlayerLight: {fileID: 0}
