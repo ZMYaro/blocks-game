@@ -4,20 +4,29 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+	private const int HEIGHT = 64;
 	private const float ACC_FACTOR = 0.7f;
 	private const float MAX_WALK_SPEED = 2.1f;
 	private const float BASE_JUMP_ACC = 5f;
 	private const float HIGH_JUMP_MIN_SPEED = 1f;
 	private const float HIGH_JUMP_MULTIPLIER = 1.5f;
+	private const float MIN_THROW_SPEED = 1f;
+	private const float THROW_SPEED_MULTIPLIER = 1f;
 	private const string RESPAWN_POINT_TAG = "Respawn";
 	private const string KILL_TRIGGER_TAG = "KillTrigger";
 
 	public LayerMask platformLayerMask;
+	/// <summary>The carried boxes, from bottom to top</summary>
+	public List<GlowBox> boxes;
+	/// <summary>Object that turns the screen black when enabled</summary>
 	public GameObject screenBlackout;
 
 	private BoxCollider2D _collider;
 	private Rigidbody2D _rb;
 
+	/// <summary>
+	/// Called before the first frame update.
+	/// </summary>
 	private void Start()
 	{
 		_collider = GetComponent<BoxCollider2D>();
@@ -43,10 +52,7 @@ public class Player : MonoBehaviour
 	/// </summary>
 	private void UpdateCollider()
 	{
-		GlowBox[] boxes = GetComponentsInChildren<GlowBox>();
-		const int PLAYER_HEIGHT = 64;
-		const int BOX_SIZE = 48;
-		_collider.size = new Vector2(BOX_SIZE / 100f, (PLAYER_HEIGHT + (boxes.Length * BOX_SIZE)) / 100f);
+		_collider.size = new Vector2(GlowBox.SIZE / 100f, (HEIGHT + (boxes.Count * GlowBox.SIZE)) / 100f);
 		_collider.offset = new Vector2(0, _collider.size.y / 2f);
 	}
 
@@ -57,8 +63,12 @@ public class Player : MonoBehaviour
 	{
 		HandleHorizMovement();
 		HandleJump();
+		HandleThrow();
 	}
 
+	/// <summary>
+	/// Check whether there was an input to move and handle it.
+	/// </summary>
 	private void HandleHorizMovement()
 	{
 		// Accelerate in response to player input.
@@ -76,6 +86,9 @@ public class Player : MonoBehaviour
 			1);
 	}
 
+	/// <summary>
+	/// Check whether there was an input to jump and handle it.
+	/// </summary>
 	private void HandleJump()
 	{
 		if (!IsOnGroundOrWall() || !Input.GetButtonDown("Jump"))
@@ -89,6 +102,58 @@ public class Player : MonoBehaviour
 			jumpAcc += (Mathf.Abs(_rb.velocity.x) - HIGH_JUMP_MIN_SPEED) * HIGH_JUMP_MULTIPLIER;
 		}
 		_rb.velocity = new Vector2(_rb.velocity.x, jumpAcc);
+	}
+
+	/// <summary>
+	/// Check whether there was an input to throw a box and handle it.
+	/// </summary>
+	private void HandleThrow()
+	{
+		string colorTag =
+			Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1) ? "Red" :
+			Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2) ? "Green" :
+			Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3) ? "Yellow" :
+			Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4) ? "Cyan" :
+			Input.GetKeyDown(KeyCode.Alpha5) || Input.GetKeyDown(KeyCode.Keypad5) ? "Purple" : null;
+		
+		if (colorTag == null)
+		{
+			return;
+		}
+		ThrowBox(colorTag);
+	}
+
+	private void ThrowBox(string colorTag)
+	{
+		GlowBox thrownBox = null;
+		foreach (GlowBox box in boxes)
+		{
+			if (box.tag == colorTag)
+			{
+				// Throw in the direction you are moving.
+				Vector2 throwVelocity = _rb.velocity;
+				throwVelocity *= THROW_SPEED_MULTIPLIER;
+				// If standing still, throw whichever direction the player is facing.
+				if (throwVelocity.magnitude < MIN_THROW_SPEED)
+				{
+					throwVelocity.x = transform.localScale.x < 0 ? -MIN_THROW_SPEED : MIN_THROW_SPEED;
+				}
+				Debug.Log(throwVelocity);
+				box.Release(throwVelocity);
+				// Note the box that was found so it can be removed and subsequent ones can shift down.
+				thrownBox = box;
+			}
+			else if (thrownBox != null)
+			{
+				// Shift subsequent boxes down.
+				box.transform.position = new Vector2(
+					box.transform.position.x,
+					box.transform.position.y - (GlowBox.SIZE / 100f));
+			}
+		}
+		// Remove the box from the boxes list and recalculate the player's collider size.
+		boxes.Remove(thrownBox);
+		UpdateCollider();
 	}
 
 	private bool IsOnGroundOrWall()
