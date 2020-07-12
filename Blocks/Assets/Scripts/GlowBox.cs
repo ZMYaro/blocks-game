@@ -37,5 +37,17 @@ public class GlowBox : MonoBehaviour
 		_rb.bodyType = RigidbodyType2D.Dynamic;
 		_rb.velocity = velocity;
 		_collider.enabled = true;
+
+		// Disable other objects of the same color.
+		GameObject[] sameColoredObjects = GameObject.FindGameObjectsWithTag(tag);
+		foreach (GameObject obj in sameColoredObjects)
+		{
+			if (obj == gameObject)
+			{
+				// Do not disable self.
+				continue;
+			}
+			obj.SetActive(false);
+		}
 	}
 }
