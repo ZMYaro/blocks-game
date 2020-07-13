@@ -180,7 +180,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.48, y: 0.64}
+  m_Size: {x: 0.53, y: 0.64}
   m_EdgeRadius: 0
 --- !u!50 &253424470042195822
 Rigidbody2D:
@@ -218,6 +218,8 @@ MonoBehaviour:
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 256
+  boxes: []
+  screenBlackout: {fileID: 0}
 --- !u!1001 &253424468232636300
 PrefabInstance:
   m_ObjectHideFlags: 0

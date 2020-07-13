@@ -157,7 +157,7 @@ public class Player : MonoBehaviour
 
 	private bool IsOnGroundOrWall()
 	{
-		const float ALLOWED_SPACE_AROUND = 0.02f;
+		const float ALLOWED_SPACE_AROUND = 0.05f;
 		RaycastHit2D raycastHit = Physics2D.BoxCast(
 			_collider.bounds.center,
 			_collider.bounds.size + new Vector3(ALLOWED_SPACE_AROUND, ALLOWED_SPACE_AROUND, 0),
